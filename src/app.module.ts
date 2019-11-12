@@ -3,8 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ImageCompModule } from './image-comp/image-comp.module';
 
+
 @Module({
-  imports: [ImageCompModule],
+  imports: [ImageCompModule,],
   controllers: [AppController,],
   providers: [AppService,],
 })

@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ImageCompController } from './image-comp.controller';
 import { ImageCompService } from './image-comp.service';
+import { MulterModule } from '@nestjs/platform-express';
+import { file } from '@babel/types';
 
 @Module({
-    controllers: [ImageCompController],
+   
+    imports:[],
+    controllers: [ImageCompController,],
     providers: [ImageCompService],
     exports: [ImageCompService],
 })
-export class ImageCompModule {}
+export class ImageCompModule {
+   
+}
