@@ -1,4 +1,4 @@
-import { Controller, Get, UseInterceptors, UploadedFile, Post } from '@nestjs/common';
+import { Controller, Get, UseInterceptors, UploadedFile, Post, Body } from '@nestjs/common';
 import {ImageCompService} from './image-comp.service'
 import {FileInterceptor,} from '@nestjs/platform-express';
 import { diskStorage } from 'multer'
@@ -16,7 +16,7 @@ export class ImageCompController {
        return this.imageComp.helloResp();
     }
     @Post('upload')
-    @UseInterceptors(FileInterceptor('file', {
+    @UseInterceptors(FileInterceptor('pic', {
       storage: diskStorage({
         destination: './uploads/',
         filename: function ( req, file, cb ) {
@@ -27,8 +27,8 @@ export class ImageCompController {
       })
       
     }))
-    uploadFile(@UploadedFile() file) {
-      console.log('called')
+    uploadFile(@UploadedFile() file,@Body() dto) {
+      console.log('called',file,dto)
       // console.log(file.extname)
       // console.log(file);
       
