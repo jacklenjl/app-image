@@ -1,8 +1,10 @@
-import { Controller, Get, UseInterceptors, UploadedFile, Post, Body } from '@nestjs/common';
+import { Controller, Get, UseInterceptors, UploadedFile, Post, Body, Res } from '@nestjs/common';
 import {ImageCompService} from './image-comp.service'
 import {FileInterceptor,} from '@nestjs/platform-express';
 import { diskStorage } from 'multer'
-import { extname } from 'path'
+const imagemin = require("imagemin");
+const imageminJpegtran = require("imagemin-jpegtran");
+const imageminOptipng = require("imagemin-optipng");
 @Controller('image-comp')
 export class ImageCompController {
 
@@ -18,21 +20,27 @@ export class ImageCompController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('pic', {
       storage: diskStorage({
-        destination: './uploads/',
+        // destination: './uploads/',
         filename: function ( req, file, cb ) {
           const ext = file.originalname.split('.');
           console.log("ext is:",ext)
           
-        cb( null, file.originalname+ '-' + Date.now()+`.${ext[1]}`);}
+        cb( null, 'Compressed'+file.originalname);}
       })
       
     }))
-    uploadFile(@UploadedFile() file,@Body() dto) {
+    async uploadFile(@UploadedFile() file,@Body() dto,@Res() res) {
       console.log('called',file,dto)
-      // console.log(file.extname)
-      // console.log(file);
-      
-      return "file uploaded successfully"
+       const files = await imagemin([file.path], {
+              destination: "public/imagesOpt",
+              plugins: [imageminJpegtran(), imageminOptipng()]
+            });
+        console.log("compressed file is", files[0].destinationPath)
+        const sizeVal= parseInt(file.size)-parseInt(files[0].data.length)
+        console.log( (files[0].data.length))
+       res.download(files[0].destinationPath)
+      //  console.log("sssssssss",sizeVal)
+      //  return  { head_val: sizeVal }
     }
 
 

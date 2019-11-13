@@ -8,7 +8,7 @@ export class AppController {
   @Get()
   @Render('index')
   getHello():any{
-    return { head_val: 'cool' };
+    // return { head_val: 'cool' };
     // return this.appService.getHello();
   }
 }
